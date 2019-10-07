@@ -1,0 +1,5 @@
+[{"Namn":"banan","ProduktId":"321",
+"Price":122.2,
+"Leverantorer":[{"Namn":"Lev1","Adress":"231312"},
+{"Namn":"Lev2","Adress":"231323423412"}]},
+{"Namn":"äpple","ProduktId":"333","Price":22.2,"Leverantorer":null},{"Namn":"saft","ProduktId":"123","Price":12.3,"Leverantorer":null}]

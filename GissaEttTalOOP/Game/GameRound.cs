@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GissaEttTalOOP.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,10 +13,12 @@ namespace GissaEttTalOOP.Game
         int CorrectAnswer;
 
         static Random random = new Random();
+        private readonly IGameUserInputOutput ui;
 
-        public GameRound(Settings settings)
+        public GameRound(Settings settings, IGameUserInputOutput ui)
         {
             Settings = settings;
+            this.ui = ui;
             Guesses = 1;
             CorrectAnswer = random.Next(settings.Min, settings.Max);
         }
@@ -23,26 +26,26 @@ namespace GissaEttTalOOP.Game
 
         public void Run()
         {
-            UI.ConsoleUI.ShowMessage($"Gissa ett tal mellan {Settings.Min} och {Settings.Max}");
+            ui.ShowMessage($"Gissa ett tal mellan {Settings.Min} och {Settings.Max}");
 
             while(true)
             {
                 
-                var playerNumber = UI.ConsoleUI.GetIntBetween(
+                var playerNumber = ui.GetIntBetween(
                     Settings.Min,Settings.Max, $"Gissning {Guesses}:");
                 if (playerNumber < CorrectAnswer)
                 {
-                    UI.ConsoleUI.ShowMessage("Talet är större.");
+                    ui.ShowMessage("Talet är större.");
                     Guesses++;
                 }
                 else if (playerNumber > CorrectAnswer)
                 {
-                    UI.ConsoleUI.ShowMessage("Talet är mindre.");
+                    ui.ShowMessage("Talet är mindre.");
                     Guesses++;
                 }
                 if(playerNumber == CorrectAnswer)
                 {
-                    UI.ConsoleUI.ShowMessage("Hurra");
+                    ui.ShowMessage("Hurra");
                     break;
                 }
 

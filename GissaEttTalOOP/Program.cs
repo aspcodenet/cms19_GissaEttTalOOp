@@ -1,4 +1,8 @@
-﻿using System;
+﻿using GissaEttTalOOP.UI;
+using GetPass;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,44 +10,72 @@ using System.Threading.Tasks;
 
 namespace GissaEttTalOOP
 {
-    //class Person
-    //{
-    //    DateTime birthDate;
-    //    string Name;
-    //    public void SetName(string name)
-    //    {
-    //        Name = name;
-    //    }
-    //    public Person(DateTime BirthDate)
-    //    {
-    //        birthDate = BirthDate;
-    //    }
-    //    public Person(int year, int month, int day)
-    //    {
-    //        birthDate = new DateTime(year, month, day);
-    //    }
-
-    //var kalle = new Person(new DateTime(1950,1,1));
-    //kalle.SetName("Kalle");
-    //var mia = new Person(new DateTime(1952, 2, 2));
-    //mia.SetName("Mia");
-    //var josefine = new Person(1953,3,3);
-    //josefine.SetName("Josefine");
-
-
-    //}
-    class Program
+     class Program
     {
+        class Leverantor
+        {
+            public string Namn { get; set; }
+
+            public string Adress { get; set; }
+        }
+
+        class Produkt
+        {
+            public string Namn { get; set; }
+            public string ProduktId { get; set; }
+            public decimal Price { get; set; }
+            public List<Leverantor> Leverantorer{ get; set; } 
+    }
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static void Main(string[] args)
         {
-            int min = UI.ConsoleUI.GetIntBetween(1, 10, "Ange minsta värde i spelet");
-            int max = UI.ConsoleUI.GetIntBetween(100, 1000, "Ange högsta värde i spelet");
+            var list = new List<Produkt>();
 
-            var settings = new Game.Settings(min,max);
+            //var s = System.IO.File.ReadAllText("..\\..\\produkt.txt");
+            //list = JsonConvert.DeserializeObject<List<Produkt>>(s);
 
-            var gameEngine = new Game.GameEngine(settings);
+            list.Add(new Produkt { Namn="banan", Price=122.2m, ProduktId="321",
+                Leverantorer = new List<Leverantor> { new Leverantor { Adress="231312", Namn = "Lev1" } ,
+                new Leverantor { Adress="231323423412", Namn = "Lev2" }
+                }
+            });
+            list.Add(new Produkt { Namn = "äpple", Price = 22.2m, ProduktId = "333" });
+            list.Add(new Produkt { Namn = "saft", Price = 12.3m, ProduktId = "123" });
 
-            gameEngine.Run();
+
+            string toSave = JsonConvert.SerializeObject(list);
+            System.IO.File.WriteAllText("..\\..\\produkt.txt",toSave);
+
+            log.Debug("Nu startar programmet");
+
+            while (true)
+            {
+                Console.WriteLine("mata in lösenord för att får köra spelet");
+                var password = ConsolePasswordReader.Read();
+                if (password == "hemligt") break;
+            }
+            log.Debug("Nu har lösenordet skrivits in");
+
+            var ui = new ConsoleUI();
+            ui.ShowWelcomeScreen();
+
+            try
+            {
+                int min = ui.GetIntBetween(1, 10, "Ange minsta värde i spelet");
+                int max = ui.GetIntBetween(100, 1000, "Ange högsta värde i spelet");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+
+            //var settings = new Game.Settings(min,max);
+            //settings.Save(@"..\..\settings.txt");
+
+            //var gameEngine = new Game.GameEngine(settings,ui);
+
+            //gameEngine.Run();
 
         }
     }

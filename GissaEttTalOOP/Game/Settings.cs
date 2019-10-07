@@ -28,5 +28,23 @@ namespace GissaEttTalOOP.Game
 
             this.Max = max;
         }
+
+
+        internal void Load(string file)
+        {
+            var lines = System.IO.File.ReadAllLines(file);
+            Min = Convert.ToInt32(lines[0]);
+            Max = Convert.ToInt32(lines[1]);
+        }
+
+        internal void Save(string file)
+        {
+            var lines = new string[]
+            {
+                Min.ToString(),
+                Max.ToString()
+            };
+            System.IO.File.WriteAllLines(file,lines);
+        }
     }
 }
